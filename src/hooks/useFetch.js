@@ -9,17 +9,25 @@ const useFetch = (url) => {
         const fetchData = async () => {
             setIsPending(true)
 
-            const res = await fetch(url)
-            const json = await res.json()
+            try{
+                const res = await fetch(url)
+                const json = await res.json()
 
-            setIsPending(false)
-            setData(json)
+                setIsPending(false)
+                setData(json)
+                setError(null)
+            } catch (err) {
+                setIsPending(false)
+                setError(`Could not fetch the data ${err.message}`)
+                console.log(err.message);
+            }
+            
         }
 
         fetchData()
     }, [url])
 
-    return {data, isPending}
+    return {data, isPending, error}
 }
 
 export default useFetch;
